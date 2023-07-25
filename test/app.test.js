@@ -6,3 +6,8 @@ test('GET / should return "Hello, World!"', async () => {
   expect(response.status).toBe(200);
   expect(response.text).toContain("Hello, World!");
 });
+
+afterAll((done) => {
+  // Close the server after all tests are done
+  app.close(done);
+});
