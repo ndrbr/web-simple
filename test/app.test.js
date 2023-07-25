@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../index");
+const { app, server } = require("../index");
 
 test('GET / should return "Hello, World!"', async () => {
   const response = await request(app).get("/");
@@ -9,5 +9,8 @@ test('GET / should return "Hello, World!"', async () => {
 
 afterAll((done) => {
   // Close the server after all tests are done
-  app.close(done);
+  server.close(() => {
+    console.log("Server closed");
+    done();
+  });
 });
