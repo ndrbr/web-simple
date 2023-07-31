@@ -49,3 +49,14 @@ jobs:
         with:
           name: WebSimpleStack
           template: myStack.yaml
+
+      - name: Deploy to EC2
+        id: deploy
+        run: |
+          deployment_id=$(aws deploy create-deployment --application-name Web-simple --deployment-group-name Web-simple-group --s3-location bucket=myaws-deployments,key=deploy.zip,bundleType=zip --query "deploymentId" --output text)
+          echo "deployment-id=$deployment_id" >> $GITHUB_OUTPUT
+
+      - name: Post-Deployment Validation
+        run: |
+          # Wait for deployment completion
+          aws deploy wait deployment-successful --deployment-id ${{ steps.deploy.outputs.deployment-id }}

@@ -49,3 +49,20 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: !Ref SSHLocation
+  CodeDeployApplication:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: Web-simple
+      ComputePlatform: Server
+  DeploymentGroup:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    Properties:
+      ApplicationName: !Ref CodeDeployApplication
+      DeploymentConfigName: CodeDeployDefault.AllAtOnce
+      DeploymentGroupName: Web-simple-group
+      ServiceRoleArn: !GetAtt CodeDeployServiceRole.Arn
+      EC2TagFilters:
+        EC2TagFilter:
+          - Key: Name
+            Value: WebSimple
+            Type: KEY_AND_VALUE
