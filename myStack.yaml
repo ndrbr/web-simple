@@ -60,7 +60,7 @@ Resources:
       ApplicationName: !Ref CodeDeployApplication
       DeploymentConfigName: CodeDeployDefault.AllAtOnce
       DeploymentGroupName: Web-simple-group
-      ServiceRoleArn: arn:aws:iam::868133316193:role/CodeDeployServiceRole
+      ServiceRoleArn: arn:aws:iam::868133316193:role/MyCodeDeployServiceRoleEC2
       Ec2TagSet:
         Ec2TagSetList:
           - Ec2TagGroup:
