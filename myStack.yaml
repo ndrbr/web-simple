@@ -61,8 +61,8 @@ Resources:
       DeploymentConfigName: CodeDeployDefault.AllAtOnce
       DeploymentGroupName: Web-simple-group
       ServiceRoleArn: arn:aws:iam::868133316193:role/CodeDeployServiceRole
-      EC2TagFilters:
-        EC2TagFilter:
-          - Key: Name
-            Value: WebSimple
-            Type: KEY_AND_VALUE
+      Ec2TagSet:
+        - Ec2TagGroup:
+            - Key: Name
+              Value: WebSimple
+              Type: KEY_AND_VALUE
