@@ -60,7 +60,7 @@ Resources:
       ApplicationName: !Ref CodeDeployApplication
       DeploymentConfigName: CodeDeployDefault.AllAtOnce
       DeploymentGroupName: Web-simple-group
-      ServiceRoleArn: !GetAtt CodeDeployServiceRole.Arn
+      ServiceRoleArn: arn:aws:iam::868133316193:role/CodeDeployServiceRole
       EC2TagFilters:
         EC2TagFilter:
           - Key: Name
