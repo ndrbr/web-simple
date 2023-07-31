@@ -31,7 +31,7 @@ Resources:
 
           # Install the AWS CodeDeploy Agent
           cd /home/ec2-user/
-          wget https://aws-codedeploy-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/latest/install
+          wget https://aws-codedeploy-${AWS::Region}.s3.${AWS::Region}.amazonaws.com/latest/install
           chmod +x ./install
           ./install auto
 
