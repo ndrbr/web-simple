@@ -62,7 +62,8 @@ Resources:
       DeploymentGroupName: Web-simple-group
       ServiceRoleArn: arn:aws:iam::868133316193:role/CodeDeployServiceRole
       Ec2TagSet:
-        - Ec2TagGroup:
-            - Key: Name
-              Value: WebSimple
-              Type: KEY_AND_VALUE
+        Ec2TagSetList:
+          - Ec2TagGroup:
+              - Key: Name
+                Value: WebSimple
+                Type: KEY_AND_VALUE
