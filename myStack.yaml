@@ -39,7 +39,7 @@ Resources:
                   - ""
                   - - "/opt/aws/bin/cfn-signal -e 0 --stack "
                     - Ref: "AWS::StackName"
-                    - " --resource SampleLinuxInstance --region "
+                    - " --resource MyEC2Instance --region "
                     - Ref: "AWS::Region"
     CreationPolicy:
       ResourceSignal:
@@ -59,7 +59,7 @@ Resources:
           #!/bin/bash
           yum -y update
           yum -y install cfn-bootstrap
-          /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource SampleLinuxInstance --region ${AWS::Region}
+          /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource MyEC2Instance --region ${AWS::Region}
 
           curl -o- ${NvmUrl} | bash
           export NVM_DIR="$HOME/.nvm"
