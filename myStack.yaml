@@ -14,6 +14,37 @@ Parameters:
 Resources:
   MyEC2Instance:
     Type: "AWS::EC2::Instance"
+    Metadata:
+      AWS::CloudFormation::Init:
+        config:
+          packages:
+            yum:
+              ruby: []
+          files:
+            /home/ec2-user/install:
+              source:
+                Fn::Join:
+                  - ""
+                  - - "https://aws-codedeploy-"
+                    - Ref: "AWS::Region"
+                    - ".s3.amazonaws.com/latest/install"
+              mode: "000755"
+          commands:
+            00-install-agent:
+              command: "./install auto"
+              cwd: "/home/ec2-user/"
+            01-cfn-signal:
+              command:
+                Fn::Join:
+                  - ""
+                  - - "/opt/aws/bin/cfn-signal -e 0 --stack "
+                    - Ref: "AWS::StackName"
+                    - " --resource SampleLinuxInstance --region "
+                    - Ref: "AWS::Region"
+    CreationPolicy:
+      ResourceSignal:
+        Count: 1
+        Timeout: PT5M
     Properties:
       ImageId: "ami-0a481e6d13af82399"
       InstanceType: "t2.micro"
@@ -26,6 +57,10 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
+          yum -y update
+          yum -y install cfn-bootstrap
+          /opt/aws/bin/cfn-init -v --stack ${AWS::StackName} --resource SampleLinuxInstance --region ${AWS::Region}
+
           curl -o- ${NvmUrl} | bash
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -56,11 +91,12 @@ Resources:
       ComputePlatform: Server
   DeploymentGroup:
     Type: AWS::CodeDeploy::DeploymentGroup
+    DependsOn: MyEC2Instance
     Properties:
       ApplicationName: !Ref CodeDeployApplication
       DeploymentConfigName: CodeDeployDefault.AllAtOnce
       DeploymentGroupName: Web-simple-group
-      ServiceRoleArn: arn:aws:iam::868133316193:role/MyCodeDeployServiceRoleEC2
+      ServiceRoleArn: arn:aws:iam::868133316193:role/CodeDeployServiceRole
       Ec2TagSet:
         Ec2TagSetList:
           - Ec2TagGroup:
