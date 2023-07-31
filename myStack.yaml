@@ -1,6 +1,16 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: Create an EC2 instance
 
+Parameters:
+  SSHLocation:
+    Description: IP for SSH access
+    Type: String
+    Default: 58.11.11.14/32
+  NvmLocation:
+    Description: URL for nvm install
+    Type: String
+    Default: "https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh"
+
 Resources:
   MyEC2Instance:
     Type: "AWS::EC2::Instance"
@@ -9,7 +19,27 @@ Resources:
       InstanceType: "t2.micro"
       KeyName: "EC2 Tutorial"
       SecurityGroups:
-        - "launch-wizard-1"
+        - !Ref MySecurityGroup
       Tags:
         - Key: "Name"
           Value: "WebSimple"
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          curl -o- ${NvmLocation} | bash
+          . ~/.nvm/nvm.sh
+          nvm install --lts
+  MySecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupName: AllowHTTPandSSH,
+      GroupDescription: Enable HTTP access
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref SSHLocation
