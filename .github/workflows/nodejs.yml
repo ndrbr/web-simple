@@ -38,7 +38,13 @@ jobs:
           role-session-name: GitHub_to_AWS_via_FederatedOIDC
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Deploy to AWS CloudFormation
+      - name: Create package
+        run: zip -r deploy.zip . -x "node_modules/*" -x "*.git*"
+
+      - name: Upload to S3
+        run: aws s3 cp ./deploy.zip s3://myaws-deployments/
+
+      - name: Create AWS Infrastructure
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: WebSimpleStack
