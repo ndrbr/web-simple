@@ -10,3 +10,6 @@ Resources:
       KeyName: "EC2 Tutorial"
       SecurityGroups:
         - "launch-wizard-1"
+      Tags:
+        - Key: "Name"
+          Value: "WebSimple"
