@@ -1,0 +1,12 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Create an EC2 instance
+
+Resources:
+  MyEC2Instance:
+    Type: "AWS::EC2::Instance"
+    Properties:
+      ImageId: "ami-0a481e6d13af82399"
+      InstanceType: "t2.micro"
+      KeyName: "EC2 Tutorial"
+      SecurityGroups:
+        - "launch-wizard-1"
