@@ -12,11 +12,48 @@ Parameters:
     Default: "https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh"
 
 Resources:
+  MyInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+
+  MyInstanceRolePolicies:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: MyInstanceRole
+      PolicyDocument:
+        Statement:
+          - Effect: Allow
+            Action:
+              - autoscaling:Describe*
+              - cloudformation:Describe*
+              - cloudformation:GetTemplate
+              - s3:Get*
+            Resource: "*"
+      Roles:
+        - !Ref "MyInstanceRole"
+
+  MyInstanceRoleInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+        - !Ref "MyInstanceRole"
+
   MyEC2Instance:
     Type: "AWS::EC2::Instance"
     Properties:
       ImageId: "ami-0a481e6d13af82399"
       InstanceType: "t2.micro"
+      IamInstanceProfile: !Ref "MyInstanceRoleInstanceProfile"
       KeyName: "EC2 Tutorial"
       SecurityGroups:
         - !Ref MySecurityGroup
@@ -31,19 +68,19 @@ Resources:
 
           # Install the AWS CodeDeploy Agent
           cd /home/ec2-user/
-          wget https://aws-codedeploy-${AWS::Region}.s3.${AWS::Region}.amazonaws.com/latest/install
+          wget https://aws-codedeploy-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/latest/install
           chmod +x ./install
           ./install auto
+          rm ./install
 
-          curl -o- ${NvmUrl} | bash
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          cat > /tmp/startup.sh << EOF
+          echo "Setting up NodeJS Environment"
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+          . /home/ec2-user/.nvm/nvm.sh
           nvm install --lts
-
-          cat <<EOF >> /home/ec2-user/.bashrc
-          export NVM_DIR="/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           EOF
+          chown ec2-user:ec2-user /tmp/startup.sh && chmod a+x /tmp/startup.sh
+          sleep 1; su - ec2-user -c "/tmp/startup.sh"
   MySecurityGroup:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
