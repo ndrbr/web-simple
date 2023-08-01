@@ -3,3 +3,8 @@ os: linux
 files:
   - source: ./
     destination: /var/app/current
+permissions:
+  - object: /var/app/current
+    owner: ec2-user
+    mode: "755"
+    group: ec2-user
