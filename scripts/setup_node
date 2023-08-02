@@ -11,4 +11,5 @@ npm install -g pm2
 
 chmod +x start-app.sh
 pm2 start -f start-app.sh --name node-app
-pm2 startup systemd -u ec2-user --hp /home/ec2-user
+# pm2 startup systemd -u ec2-user --hp /home/ec2-user
+sudo env PATH=$PATH:/home/ec2-user/.nvm/versions/node/v18.17.0/bin pm2 startup systemd -u ec2-user --hp /home/ec2-user
