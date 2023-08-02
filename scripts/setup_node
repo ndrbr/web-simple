@@ -3,7 +3,8 @@
 echo $PATH
 /home/ec2-user/.nvm/nvm.sh
 echo $PATH
+. /home/ec2-user/.bashrc
 cd /var/app/current
-env PATH=$PATH:/home/ec2-user/.nvm/versions/node/v18.17.0/bin
+PATH=$PATH:/home/ec2-user/.nvm/versions/node/v18.17.0/bin
 npm install --omit=dev
 npm install -g pm2
