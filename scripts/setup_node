@@ -1,5 +1,8 @@
 #!/bin/bash
-. ~/.bashrc
+echo $PATH
+echo $(id)
+. ~/.nvm/nvm.sh
+echo $PATH
 cd /var/app/current
 npm install --omit=dev
 npm install -g pm2
