@@ -8,4 +8,3 @@ permissions:
     owner: ec2-user
     group: ec2-user
     mode: "755"
-    type: directory
