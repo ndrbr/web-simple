@@ -4,8 +4,8 @@ files:
   - source: ./
     destination: /var/app/current
 permissions:
-  - object: /var/app/current
+  - object: /var/app
     owner: ec2-user
-    mode: "755"
     group: ec2-user
+    mode: "755"
     type: directory
