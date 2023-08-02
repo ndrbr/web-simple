@@ -1,8 +1,9 @@
 version: 0.0
 os: linux
 files:
-  - source: ./
+  - source: /
     destination: /var/app/current
+file_exists_behavior: OVERWRITE
 permissions:
   - object: /var/app
     owner: ec2-user
@@ -16,3 +17,8 @@ permissions:
     mode: "644"
     type:
       - file
+hooks:
+  AfterInstall:
+    - location: scripts/setup_node
+      timeout: 300
+      runas: ec2-user
