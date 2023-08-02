@@ -1,4 +1,9 @@
 #!/bin/bash
+npm_path="~/.nvm/versions/node/v18.17.0/bin/npm"
+while [ ! -e "$npm_path" ]; do
+    sleep 5
+done
+echo $PATH
 cd /var/app/current
-/home/ec2-user/.nvm/versions/node/v18.17.0/bin/npm install --omit=dev
+~/.nvm/versions/node/v18.17.0/bin/npm install --omit=dev
 ~/.nvm/versions/node/v18.17.0/bin/npm install -g pm2
