@@ -4,6 +4,11 @@ while [ ! -e "$npm_path" ]; do
     sleep 5
 done
 echo $PATH
+node_path="/home/ec2-user/.nvm/versions/node/v18.17.0/bin/node"
+while [ ! -e "$node_path" ]; do
+    sleep 5
+done
+echo $PATH
 
 cd /var/app/current
 /home/ec2-user/.nvm/versions/node/v18.17.0/bin/npm install --omit=dev
