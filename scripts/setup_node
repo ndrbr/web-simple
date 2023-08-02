@@ -1,12 +1,14 @@
 #!/bin/bash
 npm_path="/home/ec2-user/.nvm/versions/node/v18.17.0/bin/npm"
 while [ ! -e "$npm_path" ]; do
-    echo "npm not found..."
-    sleep 5
+    sleep 10
 done
-
 PATH=/home/ec2-user/.nvm/versions/node/v18.17.0/bin:$PATH
-echo $PATH
+
 cd /var/app/current
-/home/ec2-user/.nvm/versions/node/v18.17.0/bin/npm install --omit=dev
-/home/ec2-user/.nvm/versions/node/v18.17.0/bin/npm install -g pm2
+npm install --omit=dev
+npm install -g pm2
+
+chmod +x start-app.sh
+pm2 start -f start-app.sh --name node-app
+pm2 startup systemd -u ec2-user --hp /home/ec2-user
